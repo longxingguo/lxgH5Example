@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pdf</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <!-- <iframe style="width: 100vw;height:100vh;" frameborder=”no” border=”0″ id="pdfContainer" src=""></iframe> -->
+</body>
+<script src="script/common/jquery2.14.js"></script>
+<!-- <script src="script/pdfjs3.4.120-dist/build/pdf.js"></script>
+<script src="script/pdfjs3.4.120-dist/build/pdf.worker.js"></script> -->
+
+<script src="script/pdfjs3.4.120-dist/pdf.js"></script>
+<script src="script/pdfjs3.4.120-dist/pdf.worker.js"></script>
+<script>
+
+    //使用1 
+    // var html="script/pdfjs3.4.120-dist/web/viewer.html?file=";
+    // $("iframe").attr("src",html+encodeURIComponent("https://pro-api-vpc.zj121.com/pro-api/asiangames/getdatacontent/yayuncailiao/20230303.pdf?appCode=d2865491563943cab81902da97254712"))
+
+
+    //使用2   //每个 PDF 页面都有自己的视口，视口定义了以像素（72dpi）和初始旋转为单位的大小。默认情况下，视口被缩放到 PDF 的原始大小，但这可以通过修改视口来更改。创建视口时，还将创建一个初始转换矩阵，该矩阵将考虑所需的比例、旋转，并转换坐标系（PDF 文档中的 0,0 点在左下方，而 Canvas0,0 在左上方）。
+    // var loadingTask = pdfjsLib.getDocument("https://pro-api-vpc.zj121.com/pro-api/asiangames/getdatacontent/yayuncailiao/20230303.pdf?appCode=d2865491563943cab81902da97254712");
+    //     loadingTask.promise.then(function(pdf) {
+    //         console.log(pdf.numPages);
+    //         for (var i = 0; i < pdf.numPages; i++) {
+    //             pdf.getPage(i+1).then(function getPageHelloWorld(page) {
+    //                 console.log(page);
+    //                 const DOC_WIDTH = document.documentElement.clientWidth
+    //                 const DPR       = window.devicePixelRatio || 1
+    //                 let scale       = (DPR * DOC_WIDTH / 375)
+    //                 var width       = $("body").width();
+    //                 var height      = $("body").height();
+    //                 var viewport    = page.getViewport(scale*0.65);
+    //                 var canvas      = document.createElement('canvas');
+    //                 var context     = canvas.getContext('2d');
+    //                 context.scale(scale, scale)
+    //                 canvas.style.width = width +'px';
+    //                 canvas.style.height= height +'px';
+    //                 canvas.width       = width*scale;
+    //                 canvas.height      = height*scale;
+    //                 document.body.appendChild(canvas);
+    //                 var transform = DPR !== 1? [DPR, 0, 0, DPR, 0, 0]: null;
+    //                 page.render({canvasContext: context, viewport: viewport});
+    //             });
+    //         }
+    //     });
+        
+   //使用3  还是低版本好
+    PDFJS.getDocument("https://pro-api-vpc.zj121.com/pro-api/asiangames/getdatacontent/yayuncailiao/20230303.pdf?appCode=d2865491563943cab81902da97254712").then(function getPdfHelloWorld(pdf) {
+        console.log(pdf);
+        for (var i = 0; i < pdf.numPages; i++) {
+            pdf.getPage(i+1).then(function getPageHelloWorld(page) {
+                const DOC_WIDTH = document.documentElement.clientWidth
+                const DPR       = window.devicePixelRatio || 1
+                let scale       = (DPR * DOC_WIDTH / 375)
+                var width       = $("body").width();
+                var height      = $("body").height();
+                var viewport    = page.getViewport(scale*0.65);
+                var canvas      = document.createElement('canvas');
+                var context     = canvas.getContext('2d');
+                context.scale(scale, scale)
+                canvas.style.width = width +'px';
+                canvas.style.height= height +'px';
+                canvas.width       = width*scale;
+                canvas.height      = height*scale;
+                document.body.appendChild(canvas);
+                page.render({canvasContext: context, viewport: viewport});
+            });
+        }
+    });
+</script>
+</html>
+<!-- 
+    问题和解决方法
+
+    1  ewer.js:1564 Uncaught (in promise) Error: file origin does not match viewer's
+    注释  viewer.js里面
+    if (fileOrigin !== viewerOrigin) {
+        throw new Error("file origin does not match viewer's");
+    }
+    
+    2 Refused to get unsafe header "Accept-Ranges"
+    替换pdf.worker.js里面
+    if (fullRequestXhr.getResponseHeader('Accept-Ranges') !== 'bytes') {
+        return;
+    }
+    将 getResponseHeader 改成 getAllResponseHeaders
+
+
+    3 ios和安卓兼容有问题 使用方法getDocument  
+    老版本使用 PDFJS.getDocument  新版本使用 pdfjsLib.getDocument
+ -->
