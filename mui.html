@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mui</title>
+    <link rel="stylesheet" href="script/mui/mui.min.css">
+    <link rel="stylesheet" href="script/mui/mui.picker.min.css">
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .mui-dtpicker-title h5{
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .check{
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="check">mui弹起</div>
+</body>
+<script src="script/common/jquery2.14.js"></script>
+<script src="script/mui/mui.min.js"></script>
+<script src="script/mui/mui.picker.all.js"></script>
+<script>
+    //官网 https://dev.dcloud.net.cn/mui/ui/
+    let timePicker = new mui.DtPicker({type: "date",endDate:new Date()});
+    $(".check").on("click",function(){
+        timePicker.show(function (res) {
+            console.log(res.y.text+"-"+res.m.text+"-"+res.d.text);
+        })
+    })
+</script>
+</html>
+<!-- 
+    问题和解决方法
+
+    1  报错getSelectedItem is not a function
+    更改 mui.picker.all.js里面的 getSelectedItems
+        for (var i in self.pickers) {
+            var picker = self.pickers[i];
+            items.push(picker.getSelectedItem() || {});
+        }
+    换为
+        for (var i = 0, len = self.pickers.length; i < len; i++) {  
+            var picker = self.pickers[i];  
+            items.push(picker.getSelectedItem() || {});  
+        }
+
+    2  iOS16.2 mui.PopPicker/mui.DtPicker组件选项偏移问题
+    在  mui.picker.all.js里面的self.list.style.webkitTransformOrigin = "center center " + self.r + "px";
+    前面加上
+        if(mui.os.ios&&mui.os.plus&&plus.os.version>="16.2"){
+            return;
+        }
+        var maches = userAgent.match(/iphone os ([\d_]+) /i);
+        if (maches && maches.length >= 2 && maches[1] >= "16_2"){
+            return;
+        }
+    3 webpack打包严格模式去掉
+    "plugins":["transform-runtime","transform-remove-strict-mode",["component",[{"libraryName":"mint-ui","style":true}]]]
+ -->

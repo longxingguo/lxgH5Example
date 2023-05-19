@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="script/vant/index.css">
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+}
+li{
+    list-style: none;
+}
+body{
+    background-color: #0C2A46;
+}
+/*  */
+#vuePage{
+    margin: 20px;
+    box-shadow: 0px 0px 15px #0053a3  inset;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.timename{
+    padding: 10px 0;
+    line-height: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #D1E7FF;
+    font-weight: bold;
+}
+.timecontent{
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgba(13, 59, 101, 0.4);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #D1E7FF;
+}
+.timecontent li{
+    width: 33.3%;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+.lan{
+    color: #127FF8;
+    font-size: 16px;
+}
+.yidneglu{
+    width: 6px;
+    height: 6px;
+    border: 1px solid #4C98F5;
+    border-radius: 4px;
+    margin-right: 6px;
+}
+.van-calendar{
+    background-color: rgba(191, 220, 255, 0);
+}
+.van-calendar__header{
+    box-shadow:none;
+}
+.van-calendar__header-title{
+    display: none;
+}
+.van-calendar__header-subtitle{
+    display: none;
+}
+.van-calendar__month-title{
+    color: #D1E7FF;
+}
+.van-calendar__weekday{
+    color: #D1E7FF;
+}
+.van-calendar__weekdays .van-calendar__weekday:nth-child(6){
+    color: #3183FF;
+}
+.van-calendar__weekdays .van-calendar__weekday:nth-child(7){
+    color: #3183FF;
+}
+.van-calendar__bottom-info{
+    font-size: 20px;
+}
+.van-calendar__day--middle{
+    color: #D1E7FF !important;
+}
+.van-calendar__day--middle::after{
+    background-color: #3183FF;
+}
+.van-calendar__day--middle .van-calendar__bottom-info{
+    color: #4C98F5;
+}
+.van-calendar__day{
+    margin-bottom: 3px;
+}
+.mui-dtpicker-title h5{
+    box-sizing: border-box;
+    font-size: 16px;
+}
+.van-calendar__month-mark{
+    color: rgba(209, 231, 255, 0.1);
+}
+</style>
+</head>
+<body>
+    <div id="vuePage">
+        <div class="timetitle">
+            <div class="timename">登录详情</div>
+            <div class="timecontent">
+                <li>
+                    <span>登录：</span>
+                    <span class="shuliang lan">0次</span>
+                </li>
+                <li>
+                    <span>活跃度：</span>
+                    <span class="baifenbi lan">0%</span>
+                </li>
+                <li>
+                    <div class="yidneglu"></div>
+                    <span>已登录</span>
+                </li>
+            </div>
+        </div>
+        <van-calendar 
+        ref="calendar"
+        type="range"
+        color="#127FF8"
+        first-day-of-week="1"
+        :min-date="minDate"
+        :max-date="maxDate"
+        :default-date="defaultDate"
+        :formatter="formatter"
+        :poppable="false" 
+        :show-mark="true"
+        :show-confirm="false" 
+        :readonly="true"
+        :style="{height:'360px'}"             
+        />
+    </div>
+</body>
+<script src="script/common/jquery2.14.js"></script>
+<script src="script/vant/vue.js"></script>
+<script src="script/vant/vant.min.js"></script>
+<script>
+    //官网 https://vant-contrib.gitee.io/vant/v2/#/zh-CN/calendar#dai-ma-yan-shi
+    let vuePage = new Vue({
+        el: "#vuePage",
+        data: {
+            minDate: new Date(),
+            maxDate: new Date(),
+            defaultDate:[new Date(),new Date()]
+        },
+        methods: {
+            formatter(day){
+                if(day.type==='start'){
+                   day.topInfo= '开始';
+                }
+                if(day.type==='end'){
+                   day.topInfo= '结束';
+                } 
+                day.bottomInfo = '';
+                // for(var i=0;i<alist.length;i++){
+                //     if(day.date.Format("yyyy-MM-dd")==alist[i]){
+                //         day.bottomInfo = '⦁'
+                //     }
+                // }
+                return day;
+            }
+        },
+    });
+</script>
+</html>
