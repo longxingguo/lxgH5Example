@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../script/viewer/viewer.css">
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        li{
+            list-style: none;
+        }
+        #dowebok li img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <ul id="dowebok">
+        <li><img src="../images/fj/1.webp" alt="图片1"></li>
+        <li><img src="../images/fj/2.webp" alt="图片2"></li>
+    </ul>
+</body>
+<script src="../script/viewer/viewer.js"></script>
+<script>
+var viewer = new Viewer(document.getElementById('dowebok'),{
+    backdrop:true,//背景 默认true
+    button:true,//关闭按钮 默认true
+    navbar:true,//底部图片 默认true
+    title:true,//显示图片尺寸 默认true
+    toolbar:false,//工具栏 默认true
+    tooltip:true,//比例提示 默认true
+    keyboard:false,//键盘 默认true
+    movable:true,//是否可以移动图片 默认true
+    rotatable:true,//图片是否可以旋转 默认true
+    scalable:false,//图片是否可以翻转 默认true
+    zoomable:true,//放大 默认true
+    slideOnTouch:false,//左滑右滑下一张 默认true
+    toggleOnDblclick:true,//双击 默认true
+});
+</script>
+</html>
+<!-- //zepto、iScroll、swiper、swipe、fastclick -->
