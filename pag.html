@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body div{
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <canvas class="canvas" id="pag"></canvas>
+    </div>
+</body>
+<script src="script/pag/libpag.min.js"></script>
+<script>
+  window.onload = async () => {
+    // 实例化 PAG
+    const PAG = await window.libpag.PAGInit();
+    // 获取 PAG 素材数据
+    const buffer = await fetch('images/tq/bg_snow.pag').then((response) => response.arrayBuffer());
+    // 加载 PAG 素材为 PAGFile 对象
+    const pagFile = await PAG.PAGFile.load(buffer);
+    // 将画布尺寸设置为 PAGFile的尺寸
+    const canvas = document.getElementById('pag');
+    canvas.width = document.documentElement.clientWidth//pagFile.width();
+    canvas.height = document.documentElement.clientHeight//pagFile.height();
+    // 实例化 PAGView 对象
+    const pagView = await PAG.PAGView.init(pagFile, canvas);
+    pagView.setRepeatCount(0)
+    pagView.setScaleMode(3)
+    // 播放 PAGView
+    await pagView.play();
+    console.log(pagFile.width());
+
+    // var pageWidth1 = document.documentElement.clientWidth;
+    // var pageHeight1 = document.documentElement.clientHeight;
+    // console.log('文档宽度: ' + pageWidth1);
+    // console.log('文档高度: ' + pageHeight1);
+  };
+</script>
+</html>

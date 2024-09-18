@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码</title>
+</head>
+<body>
+<!-- 隐藏原来存放二维码的 div -->
+<div id="qrcode" style="display: none;"></div>
+
+<!-- 添加一个新的div，用来展示 canvas 转换的 base64 图片 -->
+<div style="text-align: center;">
+    <img class="qrcodeimg" src="" alt="" width="200" height="200">
+</div>
+
+</body>
+<script src="script/common/jquery2.14.js"></script>
+<script src="script/qrcode/qrcode.js"></script>
+<script>
+    new QRCode("qrcode", {
+        width: 200,
+        height: 200,
+        text: "需要生成的二维码内容"
+    });
+    // 生成二维码之后，获取canvas元素 重置 Image 对象 重置的原因是原JS生成的 image 和 canvas 对象无法在微信端长按识别
+    let qrcodeEle = document.getElementById("qrcode")
+    let cvs = qrcodeEle.querySelector('canvas')
+    $(".qrcodeimg").attr("src",cvs.toDataURL('image/png'))
+
+// 至此，一个能够满足长按识别的动态二维码已经生成，不继续处理的话会有两张二维码，长按对比就能看出，qrcode.js 生成的二维码长按无法识别，而经过重置之后的对象是可以实现此功能的。
+//注意
+//二维码的生成采用的是第三方库 qrcode，功能实现后，测试发现，在苹果 IOS 系统中长按可以正常识别，而在安卓手机长按则无法识别。第三方库 qrcode 生成二维码时，它会在我们指定 div 盒子内动态生成两个元素，分别是 canvas 和 img 因为只有长按 img 图片才会弹出识别按钮，既然安卓手机长按无法弹出识别按钮，说明安卓手机展示的不是 img 元素，而是 canvas 元素。
+
+// function convertCanvasToImage(canvas) { 
+//     var image = new Image(); 
+//     //canvas.toDataURL 返回的是一串Base64编码的URL，当然,浏览器自己肯定支持 
+//     image.src = canvas.toDataURL("image/png"); 
+//     return image; 
+// } 
+// //获取网页中的canvas对象 
+// var mycanvas1=document.getElementsByTagName('canvas')[0]; 
+// var img=convertCanvasToImage(mycanvas1); 
+// $('#imagQrDiv').append(img);//imagQrDiv表示你要插入的容器id
+</script>
+</html>
